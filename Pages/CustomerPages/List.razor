@@ -22,11 +22,12 @@ else
             <div class="row">
                 <table class="table table-bordered">
                     <thead>
-                    <tr>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Phone</th>
-                        <th scope="col">E Mail</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">E Mail</th>
+                            <th scope="col">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @foreach (var item in Customers)
@@ -35,6 +36,12 @@ else
                             <td>@item.Name @item.SurName</td>
                             <td>@item.Phone</td>
                             <td>@item.EMail</td>
+                            <td>
+                                <div class="btn btn-warning">
+                                    <a href="/customer/update/@item.Id">Update</a>
+                                </div>
+                                <button type="button" class="btn btn-danger" @onclick="(() => DeleteCustomer(item.Id))">Delete</button>
+                            </td>
                         </tr>
                     }
                     </tbody>
@@ -70,6 +77,14 @@ else
     }
 
     private async Task GetAllCustomer() => Customers = await CustomerService.GetAllCustomer();
+
+    private async Task DeleteCustomer(Guid id)
+    {
+        var customer = await CustomerService.GetByIdCustomer(id);
+        await CustomerService.DeleteCustomer(customer);
+        await GetAllCustomer();
+        StateHasChanged();
+    }
 
 
 

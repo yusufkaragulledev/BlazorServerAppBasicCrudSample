@@ -1,7 +1,70 @@
-@page "/customer/update"
+@page  "/customer/update/{id}"
+@using BlazorServerAppBasicCrudSample.Services
+@using BlazorServerAppBasicCrudSample.Entities
 
-<h3>Update</h3>
+<div class="card border-dark mb-3">
+    <div class="card-header">
+        Update Customer
+    </div>
+    <div class="card-body text-dark">
+
+        <form>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" @bind-value="@Customer.Name" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Sur Name</label>
+                    <input type="text" class="form-control" @bind-value="@Customer.SurName" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <label>Phone</label>
+                    <input type="text" class="form-control" @bind-value="@Customer.Phone" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>E Mail</label>
+                    <input type="email" class="form-control" @bind-value="@Customer.EMail" required>
+                </div>
+            </div>
+            <button class="btn btn-primary" type="button" @onclick="UpdateAsync">Update</button>
+        </form>
+
+    </div>
+</div>
 
 @code {
-    
+
+    [Parameter]
+    public string Id { get; set; }
+
+    #region injects
+
+    [Inject]
+    private ICustomerService CustomerService { get; set; }
+
+    [Inject]
+    private NavigationManager NavMgr { get; set; }
+
+    #endregion
+
+    #region properties
+
+    private Customer Customer { get; set; } = new Customer();
+
+    #endregion
+
+    protected override async Task OnInitializedAsync()
+    {
+        Customer = await CustomerService.GetByIdCustomer(Guid.Parse(Id));
+        StateHasChanged();
+    }
+
+    private async Task UpdateAsync()
+    {
+        await CustomerService.UpdateCustomer(Customer);
+        NavMgr.NavigateTo("/customer/list");
+    }
 }

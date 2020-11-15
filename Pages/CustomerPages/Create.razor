@@ -22,11 +22,11 @@
             <div class="form-row">
                 <div class="col-md-6 mb-3">
                     <label>Phone</label>
-                    <input type="text" @bind-value="@Customer.Phone" required>
+                    <input type="text" class="form-control" @bind-value="@Customer.Phone" required>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label>E Mail</label>
-                    <input type="email" @bind-value="@Customer.EMail" required>
+                    <input type="email" class="form-control" @bind-value="@Customer.EMail" required>
                 </div>
             </div>
             <button class="btn btn-primary" type="button" @onclick="CreateAsync">Create</button>
