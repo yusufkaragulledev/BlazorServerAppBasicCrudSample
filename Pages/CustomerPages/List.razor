@@ -1,0 +1,76 @@
+@page "/customer/list"
+@using BlazorServerAppBasicCrudSample.Services
+@using BlazorServerAppBasicCrudSample.Entities
+
+@if (Customers == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <div class="card border-dark mb-3">
+        <div class="card-header">
+            Customer List
+            <NavLink class="nav-link float-right" href="/customer/create">
+                <button class="btn btn-primary">Create</button>
+            </NavLink>
+        </div>
+        <div class="card-body text-dark">
+
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">E Mail</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Customers)
+                    {
+                        <tr>
+                            <td>@item.Name @item.SurName</td>
+                            <td>@item.Phone</td>
+                            <td>@item.EMail</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+}
+
+@code {
+
+    #region injects
+
+    [Inject]
+    private ICustomerService CustomerService { get; set; }
+
+    #endregion
+
+    #region fields
+
+    protected IEnumerable<Customer> Customers;
+
+    #endregion
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await GetAllCustomer();
+            StateHasChanged();
+        }
+    }
+
+    private async Task GetAllCustomer() => Customers = await CustomerService.GetAllCustomer();
+
+
+
+}
