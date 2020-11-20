@@ -2,7 +2,7 @@
 @using BlazorServerAppBasicCrudSample.Services
 @using BlazorServerAppBasicCrudSample.Entities
 
-@if (Customers == null)
+@if (_customers == null)
 {
     <p>
         <em>Loading...</em>
@@ -30,7 +30,7 @@ else
                         </tr>
                     </thead>
                     <tbody>
-                    @foreach (var item in Customers)
+                    @foreach (var item in _customers)
                     {
                         <tr>
                             <td>@item.Name @item.SurName</td>
@@ -63,7 +63,7 @@ else
 
     #region fields
 
-    protected IEnumerable<Customer> Customers;
+    private IEnumerable<Customer> _customers;
 
     #endregion
 
@@ -76,7 +76,7 @@ else
         }
     }
 
-    private async Task GetAllCustomer() => Customers = await CustomerService.GetAllCustomer();
+    private async Task GetAllCustomer() => _customers = await CustomerService.GetAllCustomer();
 
     private async Task DeleteCustomer(Guid id)
     {
